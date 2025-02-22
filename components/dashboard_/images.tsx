@@ -158,7 +158,7 @@ export function CardWithForm() {
       `}</style>
 
       {/* Link to Likes Page */}
-      <div className="p-4">
+      <div className="p-4" style={{display: 'none'}}>
         <Link href="/likes" className="text-blue-500 hover:underline">
           View Liked Images ({likedImages.size})
         </Link>
