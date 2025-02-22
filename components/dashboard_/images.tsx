@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,87 +13,67 @@ export function CardWithForm() {
   const [page, setPage] = useState(1);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const [likedImages, setLikedImages] = useState<Set<string>>(() => {
-    // Load from localStorage on mount
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('likedImages') : null;
+    if (typeof window === "undefined") return new Set();
+    const saved = localStorage.getItem("likedImages");
     return saved ? new Set(JSON.parse(saved)) : new Set<string>();
   });
+
   const loadingRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | null>(null);
   const seenImages = useRef(new Set<string>());
 
-  const searchQueries = ['Female fashion trend'];
+  const searchQueries = ["Female fashion trend"];
 
-  // Persist likedImages to localStorage whenever it changes
+  // Persist liked images to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('likedImages', JSON.stringify(Array.from(likedImages)));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("likedImages", JSON.stringify(Array.from(likedImages)));
+    }
   }, [likedImages]);
 
+  // Infinite scroll observer
   useEffect(() => {
-    const options = {
-      root: null,
-      rootMargin: "100px",
-      threshold: 0.1,
-    };
-
-    observerRef.current = new IntersectionObserver((entries) => {
-      const target = entries[0];
-      if (target.isIntersecting && !isLoading) {
-        setPage((prev) => prev + 1);
-      }
-    }, options);
-
-    if (loadingRef.current) {
-      observerRef.current.observe(loadingRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !isLoading) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { root: null, rootMargin: "100px", threshold: 0.1 }
+    );
+    if (loadingRef.current) observerRef.current.observe(loadingRef.current);
+    return () => observerRef.current?.disconnect();
   }, [isLoading]);
 
+  // Fetch images on page change
   useEffect(() => {
     fetchImages();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
-  const getRandomQuery = () => {
-    const randomIndex = Math.floor(Math.random() * searchQueries.length);
-    return searchQueries[randomIndex];
-  };
-
-  const getRandomPage = () => {
-    return Math.floor(Math.random() * 15) + 1;
-  };
+  const getRandomQuery = () => searchQueries[Math.floor(Math.random() * searchQueries.length)];
+  const getRandomPage = () => Math.floor(Math.random() * 15) + 1;
 
   const fetchImages = async () => {
     if (isLoading) return;
     setIsLoading(true);
-
     try {
-      const fetchPromises = Array(3).fill(null).map(async () => {
+      const fetchPromises = Array.from({ length: 3 }, async () => {
         const query = getRandomQuery();
         const randomPage = getRandomPage();
         const res = await fetch(
           `https://api.pexels.com/v1/search?query=${query}&page=${randomPage}&per_page=5`,
-          {
-            headers: {
-              Authorization: process.env.NEXT_PUBLIC_PEXELS_API_KEY || "",
-            },
-          }
+          { headers: { Authorization: process.env.NEXT_PUBLIC_PEXELS_API_KEY || "" } }
         );
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
       });
-
       const results = await Promise.all(fetchPromises);
       const newImages = results
         .flatMap((data) => data?.photos?.map((photo: any) => photo.src.large) || [])
         .filter((imageUrl) => !seenImages.current.has(imageUrl));
-
-      const shuffledImages = newImages.sort(() => Math.random() - 0.5);
-      shuffledImages.forEach((imageUrl) => seenImages.current.add(imageUrl));
-      setCardSets((prev) => [...prev, ...shuffledImages]);
+      newImages.forEach((imageUrl) => seenImages.current.add(imageUrl));
+      setCardSets((prev) => [...prev, ...newImages]);
     } catch (error) {
       console.error("Error fetching images:", error);
     } finally {
@@ -103,16 +83,12 @@ export function CardWithForm() {
 
   const toggleFullscreen = (imageUrl: string | null) => {
     setFullscreenImage(imageUrl);
-    if (imageUrl) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = imageUrl ? "hidden" : "auto";
   };
 
   return (
     <>
-      {/* Inject custom CSS for the ultra-cool animation */}
+      {/* Global CSS for Animations */}
       <style jsx global>{`
         @keyframes heartSpin {
           0% {
@@ -182,7 +158,7 @@ export function CardWithForm() {
       `}</style>
 
       {/* Link to Likes Page */}
-      <div className="p-4" style={{ display: 'none' }}>
+      <div className="p-4">
         <Link href="/likes" className="text-blue-500 hover:underline">
           View Liked Images ({likedImages.size})
         </Link>
@@ -191,10 +167,7 @@ export function CardWithForm() {
       {cardSets.length === 0 && isLoading ? (
         <div className="space-y-4">
           {[...Array(3)].map((_, index) => (
-            <Card
-              key={index}
-              className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
-            >
+            <Card key={index} className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg">
               <Skeleton className="aspect-[3/4]" />
               <CardFooter>
                 <Skeleton className="w-20 h-6" />
@@ -204,10 +177,7 @@ export function CardWithForm() {
         </div>
       ) : (
         cardSets.map((imageUrl, index) => (
-          <Card
-            key={`${imageUrl}-${index}`}
-            className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg"
-          >
+          <Card key={`${imageUrl}-${index}`} className="group relative overflow-hidden transition-all duration-300 hover:shadow-lg">
             <div className="aspect-[3/4] relative">
               <img
                 src={imageUrl}
@@ -242,77 +212,124 @@ export function CardWithForm() {
                     }}
                   >
                     <Heart
-                      className={`h-52 w-52 ${
+                      className={`h-6 w-6 ${
                         likedImages.has(imageUrl)
-                          ? 'text-red-500 heart-liked'
-                          : 'text-white heart-unliked stroke-2'
-                      }`}
-                      fill={likedImages.has(imageUrl) ? 'currentColor' : 'none'}
+                          ? "text-red-500"
+                          : "text-white stroke-2"
+                      } ${likedImages.has(imageUrl) ? "heart-liked" : "heart-unliked"}`}
+                      fill={likedImages.has(imageUrl) ? "currentColor" : "none"}
                     />
                     {likedImages.has(imageUrl) && (
                       <>
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '10px',
-                            '--color': 'rgba(255, 215, 0, 0.9)',
-                            '--translate-x': '15px',
-                            '--translate-y': '-15px',
-                          }}
+                          style={
+                            {
+                              "--size": "8px",
+                              "--color": "rgba(255, 215, 0, 0.9)",
+                              "--translate-x": "15px",
+                              "--translate-y": "-15px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '6px',
-                            '--color': 'rgba(255, 0, 0, 0.8)',
-                            '--translate-x': '-20px',
-                            '--translate-y': '10px',
-                          }}
+                          style={
+                            {
+                              "--size": "6px",
+                              "--color": "rgba(255, 0, 0, 0.8)",
+                              "--translate-x": "-20px",
+                              "--translate-y": "10px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '10px',
-                            '--color': 'rgba(255, 255, 255, 0.9)',
-                            '--translate-x': '10px',
-                            '--translate-y': '20px',
-                          }}
+                          style={
+                            {
+                              "--size": "8px",
+                              "--color": "rgba(255, 0, 0, 0.8)",
+                              "--translate-x": "-20px",
+                              "--translate-y": "10px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '7px',
-                            '--color': 'rgba(255, 215, 0, 0.8)',
-                            '--translate-x': '-15px',
-                            '--translate-y': '-20px',
-                          }}
+                          style={
+                            {
+                              "--size": "6px",
+                              "--color": "rgba(143, 241, 30, 0.8)",
+                              "--translate-x": "-20px",
+                              "--translate-y": "10px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '12px',
-                            '--color': 'rgba(49, 223, 14, 0.8)',
-                            '--translate-x': '-15px',
-                            '--translate-y': '-20px',
-                          }}
+                          style={
+                            {
+                              "--size": "6px",
+                              "--color": "rgba(248, 99, 99, 0.8)",
+                              "--translate-x": "-20px",
+                              "--translate-y": "10px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '7px',
-                            '--color': 'rgba(12, 239, 247, 0.8)',
-                            '--translate-x': '-15px',
-                            '--translate-y': '-20px',
-                          }}
+                          style={
+                            {
+                              "--size": "6px",
+                              "--color": "rgba(3, 33, 165, 0.8)",
+                              "--translate-x": "-20px",
+                              "--translate-y": "10px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span
                           className="sparkle"
-                          style={{
-                            '--size': '9px',
-                            '--color': 'rgba(255, 0, 0, 0.7)',
-                            '--translate-x': '20px',
-                            '--translate-y': '0px',
-                          }}
+                          style={
+                            {
+                              "--size": "6px",
+                              "--color": "rgba(255, 200, 200, 0.8)",
+                              "--translate-x": "-20px",
+                              "--translate-y": "10px",
+                            } as React.CSSProperties
+                          }
+                        />
+                        <span
+                          className="sparkle"
+                          style={
+                            {
+                              "--size": "10px",
+                              "--color": "rgba(255, 255, 255, 0.9)",
+                              "--translate-x": "10px",
+                              "--translate-y": "20px",
+                            } as React.CSSProperties
+                          }
+                        />
+                        <span
+                          className="sparkle"
+                          style={
+                            {
+                              "--size": "7px",
+                              "--color": "rgba(255, 215, 0, 0.8)",
+                              "--translate-x": "-15px",
+                              "--translate-y": "-20px",
+                            } as React.CSSProperties
+                          }
+                        />
+                        <span
+                          className="sparkle"
+                          style={
+                            {
+                              "--size": "9px",
+                              "--color": "rgba(255, 0, 0, 0.7)",
+                              "--translate-x": "20px",
+                              "--translate-y": "0px",
+                            } as React.CSSProperties
+                          }
                         />
                         <span className="ripple" />
                       </>
@@ -327,8 +344,8 @@ export function CardWithForm() {
 
       <div ref={loadingRef} className="col-span-full h-4">
         {isLoading && (
-          <div className="w-full text-center py-4">
-            <div className="animate-pulse text-gray-400">Loading images...</div>
+          <div className="w-full text-center py-4 animate-pulse text-gray-400">
+            Loading images...
           </div>
         )}
       </div>
