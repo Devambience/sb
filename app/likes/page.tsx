@@ -79,7 +79,7 @@ export default function LikesPage() {
         <div
           className={`fixed top-0 left-0 ${
             isOpen ? "md:left-64" : "md:left-16"
-          } right-0 px-4 flex lg:rounded-xl h-16 shrink-0 items-center gap-2 backdrop-blur-xl border-b bg-black/30 backdrop-sepia-0 z-[60] sm:rounded-bl-lg sm:rounded-br-lg`}
+          } right-0 px-4 flex lg:rounded-xl h-16 shrink-0 items-center gap-2 backdrop-blur-xl border-b bg-gradient-to-b from-black to-transparent backdrop-sepia-0 z-[60] sm:rounded-bl-lg sm:rounded-br-lg`}
         >
           <header className="flex items-center justify-between w-full">
             <div className="flex items-center gap-2 px-4">
