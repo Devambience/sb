@@ -4,6 +4,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import RedirectHandler from "@/components/RedirectHandler"; // Import Client Component
 
+import { Analytics } from "@vercel/analytics/react"
+
 const geistSans = localFont({
   src: "/fonts/GeistVF.woff",
   variable: "--font-geist-sans",
