@@ -43,7 +43,7 @@ export default function Page() {
         <div
           className={`fixed top-0 left-0 ${
             isOpen ? "md:left-64" : "md:left-30"
-          } right-0 px-4 flex lg:rounded-xl h-16 shrink-0 items-center gap-2 backdrop-blur-xl border-b bg-black/30 backdrop-sepia-0 z-[60] sm:rounded-bl-lg sm:rounded-br-lg bg-linear-to-t from-sky-500 to-indigo-500`}
+          } right-0 px-4 flex lg:rounded-xl h-16 shrink-0 items-center gap-2 backdrop-blur-xl border-b bg-gradient-to-b from-black to-transparent backdrop-sepia-0 z-[60] sm:rounded-bl-lg sm:rounded-br-lg`}
         >
           <header>
             <div className="flex items-center gap-2 px-4 z-500">
