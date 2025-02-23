@@ -63,7 +63,7 @@ export function CardWithForm() {
         const randomPage = getRandomPage();
         const res = await fetch(
           `https://api.pexels.com/v1/search?query=${query}&page=${randomPage}&per_page=5`,
-          { headers: { Authorization: process.env.NEXT_PUBLIC_PEXELS_API_KEY} }
+          { headers: { Authorization: process.env.NEXT_PUBLIC_PEXELS_API_KEY | ""} }
         );
         if (!res.ok) throw new Error(res.statusText);
         return res.json();
