@@ -2,11 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import RedirectHandler from "@/components/RedirectHandler"; // Import Client Component
-import Script from "next/script"; // Import Next.js Script for AdSense
-
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
+import RedirectHandler from "@/components/RedirectHandler";
+import QRDialog from "@/components/qr-dialog"; // Import QRDialog Component
 
 const geistSans = localFont({
   src: "/fonts/GeistVF.woff",
@@ -30,18 +27,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <head>
-        {/* Google AdSense Script */}
-        <Script
-          strategy="afterInteractive"
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
-          crossOrigin="anonymous"
-        />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -49,6 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <RedirectHandler /> {/* Handles redirects on the client side */}
+          <QRDialog /> {/* Shows the QR dialog if URL contains ?qr=true */}
           {children}
         </ThemeProvider>
       </body>
