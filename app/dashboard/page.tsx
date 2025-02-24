@@ -9,6 +9,8 @@ import { PlaceholdersAndVanishInput } from "../../components/ui/placeholders-and
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { Bell } from "lucide-react";
+import MobileBottomNavigation from "@/components/bottom-navbar";
+
 
 import {
   SidebarInset,
@@ -78,6 +80,7 @@ export default function Page() {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Suspense fallback={<div>Loading...</div>}>
               <CardWithForm />
+              <MobileBottomNavigation />
             </Suspense>
           </div>
         </div>
