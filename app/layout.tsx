@@ -34,8 +34,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <RedirectHandler /> {/* Handles redirects on the client side */}
-          // <QRDialog />
+          <RedirectHandler />
           {children}
         </ThemeProvider>
       </body>
