@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import RedirectHandler from "@/components/RedirectHandler";
-import QRDialog from "@/components/qr-dialog"; // Import QRDialog Component
+// import QRDialog from "@/components/qr-dialog"; // Import QRDialog Component
 
 const geistSans = localFont({
   src: "/fonts/GeistVF.woff",
@@ -35,7 +35,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <RedirectHandler /> {/* Handles redirects on the client side */}
-          <QRDialog /> {/* Shows the QR dialog if URL contains ?qr=true */}
+          // <QRDialog />
           {children}
         </ThemeProvider>
       </body>
