@@ -13,7 +13,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { GlobeAltIcon, MapIcon } from "@heroicons/react/24/outline";
 import { Maximize2, MapPin, Phone } from "lucide-react";
 
 export default function QRDialog() {
