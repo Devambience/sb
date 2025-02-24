@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -14,23 +14,19 @@ import {
 } from "@/components/ui/drawer";
 import { MapPin, Phone } from "lucide-react";
 
-export default function QRDialog() {
+function QRDialogContent() {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
-  const [qrParam, setQrParam] = useState<string>(""); // Ensure it's always a string
 
   useEffect(() => {
-    setQrParam(searchParams.get("qr") ?? ""); // Default to an empty string if null
-  }, [searchParams]);
-
-  useEffect(() => {
+    const qrParam = searchParams.get("qr") ?? "";
     if (qrParam === "true") {
       setIsOpen(true);
     }
-  }, [qrParam]);
+  }, [searchParams]);
 
   return (
-    <Drawer open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
+    <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>Welcome To SBStyleHub!</DrawerTitle>
@@ -61,5 +57,13 @@ export default function QRDialog() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  );
+}
+
+export default function QRDialog() {
+  return (
+    <Suspense fallback={null}>
+      <QRDialogContent />
+    </Suspense>
   );
 }
