@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Button } from "@/components/ui/button";
 import { CardWithForm } from "@/components/dashboard_/images";
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 
 export default function Page() {
-  const [isOpen, setIsOpen] = useState(true); // Manual state
+  const [isOpen, setIsOpen] = useState(true);
 
   const placeholders = [
     "Want to see new design of Lahngas?",
@@ -38,7 +38,7 @@ export default function Page() {
 
   return (
     <SidebarProvider>
-      <AppSidebar /> {/* Pass props if supported */}
+      <AppSidebar />
       <SidebarInset>
         <div
           className={`fixed top-0 left-0 ${
@@ -76,7 +76,9 @@ export default function Page() {
           </div>
           <br />
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-            <CardWithForm />
+            <Suspense fallback={<div>Loading...</div>}>
+              <CardWithForm />
+            </Suspense>
           </div>
         </div>
       </SidebarInset>
