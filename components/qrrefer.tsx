@@ -17,10 +17,10 @@ import { MapPin, Phone } from "lucide-react";
 export default function QRDialog() {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
-  const [qrParam, setQrParam] = useState("");
+  const [qrParam, setQrParam] = useState<string>(""); // Ensure it's always a string
 
   useEffect(() => {
-    setQrParam(searchParams.get("qr"));
+    setQrParam(searchParams.get("qr") ?? ""); // Default to an empty string if null
   }, [searchParams]);
 
   useEffect(() => {
