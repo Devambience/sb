@@ -29,8 +29,8 @@ function QRDialogContent() {
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Welcome To SBStyleHub!</DrawerTitle>
-          <DrawerDescription>This action cannot be undone.</DrawerDescription>
+          <DrawerTitle>Welcome To SBStyleHub! 😄</DrawerTitle>
+          <DrawerDescription>It looks like you landed here by scanning a QR code.</DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
           <div className="flex justify-center gap-4">
@@ -51,7 +51,7 @@ function QRDialogContent() {
           </div>
           <br></br>
           <DrawerClose asChild>
-            <Button className="rounded bg-white text-black w-full py-5" variant="outline">
+            <Button className="rounded-xl bg-white text-black text-md w-full py-5" variant="outline">
               Continue With App
             </Button>
           </DrawerClose>
