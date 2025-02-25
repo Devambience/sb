@@ -29,7 +29,7 @@ function QRDialogContent() {
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Welcome To SBStyleHub! 😄</DrawerTitle>
+          <DrawerTitle>Welcome To SBStyleHub! 🥳</DrawerTitle>
           <DrawerDescription>It looks like you landed here by scanning a QR code.</DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
