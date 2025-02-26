@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import RedirectHandler from "@/components/RedirectHandler";
 import QRDialog from "@/components/qrrefer"; // Import QRDialog Component
+import ShareDialog from "@/components/share-refer";
 import MobileBottomNavigation from "@/components/bottom-navbar";
 
 const geistSans = localFont({
@@ -37,6 +38,7 @@ export default function RootLayout({
         >
           <RedirectHandler />
           <QRDialog />
+          <ShareDialog />
           <MobileBottomNavigation />
           {children}
         </ThemeProvider>
