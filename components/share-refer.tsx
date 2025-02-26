@@ -30,7 +30,7 @@ function ShareDialogContent() { // Fixed component name
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>🎊 Welcome To SBStyleHub! 🥳</DrawerTitle>
-          <DrawerDescription>It looks like you landed here by scanning a Shared Link.</DrawerDescription>
+          <DrawerDescription>It looks like you landed here by a Shared Link.</DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
           <div className="flex justify-center gap-4">
