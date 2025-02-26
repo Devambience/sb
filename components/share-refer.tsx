@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/drawer";
 import { MapPin, Phone } from "lucide-react";
 
-function QRDialogContent() {
+function ShareDialogContent() { // Fixed component name
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -49,7 +49,7 @@ function QRDialogContent() {
               <p>Contact Us</p>
             </a>
           </div>
-          <br></br>
+          <br />
           <DrawerClose asChild>
             <Button className="rounded-xl bg-white text-black text-md w-full py-5" variant="outline">
               Continue With App
@@ -61,10 +61,10 @@ function QRDialogContent() {
   );
 }
 
-export default function QRDialog() {
+export default function ShareDialog() {
   return (
     <Suspense fallback={null}>
-      <QRDialogContent />
+      <ShareDialogContent /> {/* Fixed component name */}
     </Suspense>
   );
 }
