@@ -17,11 +17,13 @@ import { MapPin, Phone } from "lucide-react";
 function QRDialogContent() {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
+  const [source, setSource] = useState("");
 
   useEffect(() => {
-    const qrParam = searchParams.get("qr") ?? "";
-    if (qrParam === "true") {
+    const qrParam = searchParams.get("share") ?? "";
+    if (qrParam) {
       setIsOpen(true);
+      setSource(qrParam); // Store whatever comes after `share=`
     }
   }, [searchParams]);
 
@@ -30,7 +32,9 @@ function QRDialogContent() {
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>🎊 Welcome To SBStyleHub! 🥳</DrawerTitle>
-          <DrawerDescription>It looks like you landed here by scanning a QR code.</DrawerDescription>
+          <DrawerDescription>
+            It looks like you landed here by scanning a <strong>{source}</strong>.
+          </DrawerDescription>
         </DrawerHeader>
         <DrawerFooter>
           <div className="flex justify-center gap-4">
