@@ -14,7 +14,7 @@ const MobileBottomNavigation = () => {
           <PaymentIcon className="w-6 h-6" />
           <span className="text-xs">Pay</span>
         </Link>
-        <Link href="/likes" className="flex px-5 py-2 rounded-full bg-[#0000008f] border flex-col items-center text-white hover:text-white">
+        <Link href="/likes" className="flex px-5 py-2 flex-col items-center text-white hover:text-white">
           <HeartIcon className="w-6 h-6" />
           <span className="text-xs">Liked</span>
         </Link>
